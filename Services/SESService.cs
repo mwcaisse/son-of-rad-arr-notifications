@@ -1,6 +1,7 @@
 using Amazon.Runtime;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
+using Serilog;
 
 namespace SonOfRadArrNotifications.Services;
 
@@ -51,7 +52,7 @@ public class SESService
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Sending email failed with exception: " + ex.Message);
+            Log.Error(ex, "Error sending email");
         }
     }
     

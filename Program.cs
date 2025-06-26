@@ -1,4 +1,17 @@
+
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
+
+Log.Information("Starting up application");
+    
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Use SeriLog for ASP.NET logging
+builder.Services.AddSerilog();
 
 // Add services to the container.
 
