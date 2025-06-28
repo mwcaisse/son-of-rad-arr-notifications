@@ -1,0 +1,55 @@
+@using Humanizer
+@using SonOfRadArrNotifications.Sonarr.Payloads
+@using SonOfRadArrNotifications.Sonarr.Payloads.Models
+
+<h2>Episode Grabbed!</h2>
+<table style="padding: 0.5rem; border: calc(.0625rem) solid #424242; border-radius: 0.5rem;  box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 3px 0px, rgba(0, 0, 0, 0.05) 0px 36px 28px -7px, rgba(0, 0, 0, 0.04) 0px 17px 17px -7px;">
+    <tr>
+        <td>
+            @{
+                var posterImage = Payload.Series.Images.FirstOrDefault(i => i.CoverType == MediaCoverTypes.Poster);
+                if (posterImage != null)
+                {
+                    <img src="@posterImage.RemoteUrl" alt="poster" style="max-width: 200px;width: 100%;"/>
+                }
+            }
+        </td>
+        <td style="padding-left: 1rem;">
+            <h2>@Payload.Series.Title</h2>
+            @{
+                if (Payload.Episodes.Count > 1)
+                {
+                    var episodes = string.Join(", ", Payload.Episodes.OrderBy(x => x.EpisodeNumber).Select(x => CreateSeasonEpisodeString(x.SeasonNumber, x.EpisodeNumber)));
+                    <h3 style="max-width: 85vh;">@episodes</h3>
+                }
+                else
+                {
+                    var episode = Payload.Episodes[0];
+                    var episodeSeasonNumber = CreateSeasonEpisodeString(episode.SeasonNumber, episode.EpisodeNumber);
+
+                    <h3>@episodeSeasonNumber @episode.Title</h3>
+                    <p>@episode.Overview</p>
+                    <p>@episode.AirDate</p>
+                }
+            }
+            <p>@Payload.Release.Quality</p>
+            <p>@Payload.Release.ReleaseTitle</p>
+            <p>@Payload.Release.Indexer</p>
+            <p>@Payload.Release.Size.Bytes().Humanize()</p>
+        </td>
+    </tr>
+</table>
+
+@code {
+    
+    [Parameter]
+    public required SonarrGrabPayload Payload { get; set; }
+
+    private static string CreateSeasonEpisodeString(int season, int episode)
+    {
+        var seasonNumber =  season.ToString("D2");
+        var episodeNumber =  episode.ToString("D2");
+
+        return $"S{seasonNumber}-E{episodeNumber}";
+    }
+}

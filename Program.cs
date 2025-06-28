@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Components.Web;
 using Serilog;
 using SonOfRadArrNotifications.Configuration;
 using SonOfRadArrNotifications.Services;
@@ -38,6 +39,7 @@ builder.Services.AddSerilog();
 
 builder.Services.AddTransient<SESService>();
 builder.Services.AddTransient<SonarrEmailBuilder>();
+builder.Services.AddTransient<HtmlRenderer>();
 
 // Add services to the container.
 

@@ -36,10 +36,26 @@ public class NotificationController : Controller
     {
         var bodyReader = new StreamReader(Request.Body);
         var bodyJson = await bodyReader.ReadToEndAsync();
-        var email = _sonarrEmailBuilder.BuildEmailBody(bodyJson);
+        var email = await _sonarrEmailBuilder.BuildEmailBody(bodyJson);
         
         await _sesService.SendEmail(_notificationConfiguration.NotificationEmailAddress, email.Subject, email.Body);
         return Ok();
+    }
+
+    [HttpPost]
+    [Route("sonarr/render")]
+    public async Task<IActionResult> RenderSonarrNotification()
+    {
+        var bodyReader = new StreamReader(Request.Body);
+        var bodyJson = await bodyReader.ReadToEndAsync();
+        var email = await _sonarrEmailBuilder.BuildEmailBody(bodyJson);
+
+        return new ContentResult()
+        {
+            Content = email.Body,
+            ContentType = "text/html",
+            StatusCode = 200
+        };
     }
 
     [HttpPost]
