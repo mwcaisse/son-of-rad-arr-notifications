@@ -8,23 +8,36 @@ public class SonarrEmailBuilder
 
     public NotificationEmail BuildEmailBody(string rawPayloadJson)
     {
-        var payload = DeserializePayload(rawPayloadJson);
-
-        if (payload == null)
+        try
         {
+            // The JsonSerializer expects the discriminator type to be the first field in the payload
+            //      we can't guarantee that, so we deserialize it first to base type to get the type
+            //      then deserialize it as the proper type once we know what it is.
+            var payload = JsonSerializer.Deserialize<SonarrPayloadBase>(rawPayloadJson);
+
+            if (payload != null)
+            {
+                switch (payload.EventType)
+                {
+                    // TODO: reserialize it into the appropriate type
+                    case SonarrEventType.Grab:
+                        break;
+                    case SonarrEventType.Download:
+                        break;
+                }
+            }
+
             return HandleUnknownPayload(rawPayloadJson);
         }
-        
-        // otherwise we shall build out the email
-        switch (payload)
+        catch (Exception e)
         {
-            case SonarrGrabPayload:
-                break;
-            case SonarrImportPayload:
-                break;
+            return new NotificationEmail()
+            {
+                Subject = "Sonarr: Failed to parse payload",
+                Body = rawPayloadJson + "\n\n\n" + e.Message + "\n\n" + e.StackTrace,
+            };
         }
-
-        return HandleUnknownPayload(rawPayloadJson);
+        
     }
 
     private NotificationEmail HandleUnknownPayload(string json)
@@ -34,25 +47,5 @@ public class SonarrEmailBuilder
             Subject = "Sonarr: Unknown Event Type",
             Body = json,
         };
-    }
-
-    /// <summary>
-    /// Deserializes the given payload JSON into its corresponding Payload class
-    ///
-    /// Returns null if it is an unknown payload type
-    /// </summary>
-    /// <param name="rawPayloadJson"></param>
-    /// <returns></returns>
-    private SonarrPayloadBase? DeserializePayload(string rawPayloadJson)
-    {
-        try
-        {
-            return JsonSerializer.Deserialize<SonarrPayloadBase>(rawPayloadJson);
-        }
-        catch (NotSupportedException e)
-        {
-            // this means that we don't have a discriminator type for this message type, return null
-            return null;
-        }
     }
 }
