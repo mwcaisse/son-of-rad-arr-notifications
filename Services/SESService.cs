@@ -27,6 +27,12 @@ public class SESService
     {
         try
         {
+            var fromEmail = _emailConfiguration.FromAddress;
+            if (!string.IsNullOrWhiteSpace(_emailConfiguration.FromAddressName))
+            {
+                fromEmail = $"{_emailConfiguration.FromAddressName} <{_emailConfiguration.FromAddress}>";
+            }
+            
             var resp = await _ses.SendEmailAsync(new SendEmailRequest()
             {
                 Destination = new Destination()
@@ -49,7 +55,7 @@ public class SESService
                         Data = subject
                     }
                 },
-                Source = _emailConfiguration.FromAddress
+                Source = fromEmail
             });
         }
         catch (Exception ex)

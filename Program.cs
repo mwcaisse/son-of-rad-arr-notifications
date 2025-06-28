@@ -25,7 +25,8 @@ var emailConfiguration = new EmailConfiguration()
     Region = builder.Configuration.GetValue<string>("email:region")!,
     AccessKey = builder.Configuration.GetValue<string>("email:accessKey")!,
     SecretKey = builder.Configuration.GetValue<string>("email:secretKey")!,
-    FromAddress = builder.Configuration.GetValue<string>("email:fromAddress")!
+    FromAddress = builder.Configuration.GetValue<string>("email:fromAddress")!,
+    FromAddressName = builder.Configuration.GetValue<string>("email:fromAddressName")
 };
 builder.Services.AddSingleton(emailConfiguration);
 

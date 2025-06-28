@@ -9,4 +9,6 @@ public class EmailConfiguration
     public required string Region { get; init; }
     
     public required string FromAddress { get; init; }
+    
+    public string? FromAddressName { get; init; }
 }
