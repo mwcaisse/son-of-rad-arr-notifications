@@ -2,21 +2,23 @@ using Amazon.Runtime;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using Serilog;
+using SonOfRadArrNotifications.Configuration;
 
 namespace SonOfRadArrNotifications.Services;
 
 public class SESService
 {
+    private readonly EmailConfiguration _emailConfiguration;
+    
     private readonly IAmazonSimpleEmailService _ses;
 
-    private readonly string _fromAddress;
 
-    public SESService()
+    public SESService(EmailConfiguration emailConfiguration)
     {
-        var credentials = new BasicAWSCredentials("accessKey", "secretKey");
-        _ses = new AmazonSimpleEmailServiceClient(credentials);
-        
-        _fromAddress = "email@email.com";
+        _emailConfiguration = emailConfiguration;
+
+        var credentials = new BasicAWSCredentials(_emailConfiguration.AccessKey, _emailConfiguration.SecretKey);
+        _ses = new AmazonSimpleEmailServiceClient(credentials, Amazon.RegionEndpoint.GetBySystemName(_emailConfiguration.Region));
     }
         
     
@@ -47,7 +49,7 @@ public class SESService
                         Data = subject
                     }
                 },
-                Source = _fromAddress
+                Source = _emailConfiguration.FromAddress
             });
         }
         catch (Exception ex)
