@@ -1,0 +1,14 @@
+services:
+  sonofradarrnotifications:
+    image: sonofradarrnotifications
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SORAN_EMAIL__REGION: ""
+      SORAN_EMAIL__ACCESSKEY: ""
+      SORAN_EMAIL__SECRETKEY: ""
+      SORAN_EMAIL__FROMADDRESS: ""
+      SORAN_NOTIFICATION__TOADDRESS: ""

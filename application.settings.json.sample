@@ -1,0 +1,11 @@
+{
+  "email": {
+    "accessKey": "",
+    "secretKey": "",    
+    "region": "",
+    "fromAddress": ""
+  },
+  "notification": {
+    "toAddress": ""
+  }
+}
