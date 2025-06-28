@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SonOfRadArrNotifications.Configuration;
 using SonOfRadArrNotifications.Services;
+using SonOfRadArrNotifications.Sonarr;
 
 namespace SonOfRadArrNotifications.Controllers;
 
@@ -13,11 +14,14 @@ public class NotificationController : Controller
     private readonly SESService _sesService;
 
     private readonly NotificationConfiguration _notificationConfiguration;
+    
+    private readonly SonarrEmailBuilder _sonarrEmailBuilder;
 
-    public NotificationController(SESService sesService, NotificationConfiguration notificationConfiguration)
+    public NotificationController(SESService sesService, NotificationConfiguration notificationConfiguration, SonarrEmailBuilder sonarrEmailBuilder)
     {
         _sesService = sesService;
         _notificationConfiguration = notificationConfiguration;
+        _sonarrEmailBuilder = sonarrEmailBuilder;
     }
 
     /*
@@ -32,7 +36,9 @@ public class NotificationController : Controller
     {
         var bodyReader = new StreamReader(Request.Body);
         var bodyJson = await bodyReader.ReadToEndAsync();
-        await _sesService.SendEmail(_notificationConfiguration.NotificationEmailAddress, "Test Notification", bodyJson);
+        var email = _sonarrEmailBuilder.BuildEmailBody(bodyJson);
+        
+        await _sesService.SendEmail(_notificationConfiguration.NotificationEmailAddress, email.Subject, email.Body);
         return Ok();
     }
 

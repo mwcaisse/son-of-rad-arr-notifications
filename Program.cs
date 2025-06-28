@@ -2,6 +2,7 @@
 using Serilog;
 using SonOfRadArrNotifications.Configuration;
 using SonOfRadArrNotifications.Services;
+using SonOfRadArrNotifications.Sonarr;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -36,6 +37,7 @@ builder.Services.AddSingleton(notificationConfiguration);
 builder.Services.AddSerilog();
 
 builder.Services.AddTransient<SESService>();
+builder.Services.AddTransient<SonarrEmailBuilder>();
 
 // Add services to the container.
 
