@@ -1,26 +1,27 @@
 @using Humanizer
+@using SonOfRadArrNotifications.Common
 @using SonOfRadArrNotifications.Sonarr.Payloads
 @using SonOfRadArrNotifications.Sonarr.Payloads.Models
 
 <h2>Episode Imported!</h2>
-<table style="padding: 0.5rem; border: calc(.0625rem) solid #424242; border-radius: 0.5rem;  box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 3px 0px, rgba(0, 0, 0, 0.05) 0px 36px 28px -7px, rgba(0, 0, 0, 0.04) 0px 17px 17px -7px;">
+<table style="@CssUtils.TableStyle">
     <tr>
         <td>
             @{
                 var posterImage = Payload.Series.Images.FirstOrDefault(i => i.CoverType == MediaCoverTypes.Poster);
                 if (posterImage != null)
                 {
-                    <img src="@posterImage.RemoteUrl" alt="poster" style="max-width: 200px;width: 100%;"/>
+                    <img src="@posterImage.RemoteUrl" alt="poster" style="@CssUtils.PosterImageStyle"/>
                 }
             }
         </td>
-        <td style="padding-left: 1rem;">
+        <td style="@CssUtils.SecondColumnStyle">
             <h2>@Payload.Series.Title</h2>
             @{
                 if (Payload.Episodes.Count > 1)
                 {
                     var episodes = string.Join(", ", Payload.Episodes.OrderBy(x => x.EpisodeNumber).Select(x => TemplateUtils.CreateSeasonEpisodeString(x.SeasonNumber, x.EpisodeNumber)));
-                    <h3 style="max-width: 85vh;">@episodes</h3>
+                    <h3 style="@CssUtils.EpisodeTitleStyle">@episodes</h3>
                 }
                 else
                 {

@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Serilog;
+using SonOfRadArrNotifications.Common;
 using SonOfRadArrNotifications.Sonarr.Payloads;
 using SonOfRadArrNotifications.Sonarr.Templates;
 
@@ -65,16 +66,12 @@ public class SonarrEmailBuilder
 
     private Task<string> RenderTemplate<T>(Dictionary<string, object> parameters) where T : IComponent
     {
-        return _htmlRenderer.Dispatcher.InvokeAsync(async () =>
-        {
-            var output = await _htmlRenderer.RenderComponentAsync<T>(ParameterView.FromDictionary(parameters!));
-            return output.ToHtmlString();
-        });
+        return EmailBuilderUtils.RenderTemplate<T>(_htmlRenderer, parameters);
     }
 
-    private async Task<NotificationEmail> HandleGrab(string json)
+    private async Task<NotificationEmail> HandleGrab(string payloadJson)
     {
-        var grabbedPayload = JsonSerializer.Deserialize<SonarrGrabPayload>(json, _serializerOptions)!;
+        var grabbedPayload = JsonSerializer.Deserialize<SonarrGrabPayload>(payloadJson, _serializerOptions)!;
 
         var html = await RenderTemplate<GrabEpisodeTemplate>(new Dictionary<string, object>()
         {
@@ -88,9 +85,9 @@ public class SonarrEmailBuilder
         };
     }
 
-    private async Task<NotificationEmail> HandleDownload(string json)
+    private async Task<NotificationEmail> HandleDownload(string payloadJson)
     {
-        var downloadPayload = JsonSerializer.Deserialize<SonarrImportPayload>(json, _serializerOptions)!;
+        var downloadPayload = JsonSerializer.Deserialize<SonarrImportPayload>(payloadJson, _serializerOptions)!;
 
         var html = await RenderTemplate<DownloadEpisodeTemplate>(new Dictionary<string, object>()
         {
