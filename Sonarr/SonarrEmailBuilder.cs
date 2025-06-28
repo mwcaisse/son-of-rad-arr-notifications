@@ -56,7 +56,7 @@ public class SonarrEmailBuilder
             Log.Error(e, "Error parsing sonar payload");
             return new NotificationEmail()
             {
-                Subject = "Sonarr: Failed to parse payload",
+                Subject = CreateSubject("Failed to parse payload"),
                 Body = rawPayloadJson + "\n\n\n" + e.Message + "\n\n" + e.StackTrace,
             };
         }
