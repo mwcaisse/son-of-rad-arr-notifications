@@ -34,9 +34,10 @@
                 }
             }
             @{
-                if (Payload.EpisodeFiles.Any())
+                var episodeFile = Payload.GetFirstEpisodeFile();
+                if (episodeFile != null)
                 {
-                    <p>@Payload.EpisodeFiles[0].Quality</p>        
+                    <p>@episodeFile.Quality</p>
                 }
             }
             <p>@Payload.Release.ReleaseTitle</p>
