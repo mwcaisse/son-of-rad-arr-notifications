@@ -7,6 +7,6 @@ public static class TemplateUtils
         var seasonNumber =  season.ToString("D2");
         var episodeNumber =  episode.ToString("D2");
 
-        return $"S{seasonNumber}-E{episodeNumber}";
+        return $"S{seasonNumber}E{episodeNumber}";
     }
 }

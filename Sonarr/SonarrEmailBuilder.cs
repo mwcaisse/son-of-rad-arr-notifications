@@ -99,7 +99,7 @@ public class SonarrEmailBuilder
 
         return new NotificationEmail()
         {
-            Subject = CreateSubject("Episode Downloaded"),
+            Subject = CreateSubject("Episode Imported"),
             Body = html,
         };
     }
