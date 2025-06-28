@@ -30,7 +30,9 @@ public class NotificationController : Controller
     [Route("sonarr")]
     public async Task<IActionResult> SonarrNotification()
     {
-        await _sesService.SendEmail(_notificationConfiguration.NotificationEmailAddress, "Test Notification", "Test Body!");
+        var bodyReader = new StreamReader(Request.Body);
+        var bodyJson = await bodyReader.ReadToEndAsync();
+        await _sesService.SendEmail(_notificationConfiguration.NotificationEmailAddress, "Test Notification", bodyJson);
         return Ok();
     }
 
