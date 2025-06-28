@@ -45,7 +45,7 @@ public class SonarrEmailBuilder
                     case SonarrEventType.Grab:
                         return await HandleGrab(rawPayloadJson);
                     case SonarrEventType.Download:
-                        break;
+                        return await HandleDownload(rawPayloadJson);
                 }
             }
 
@@ -63,24 +63,44 @@ public class SonarrEmailBuilder
         
     }
 
+    private Task<string> RenderTemplate<T>(Dictionary<string, object> parameters) where T : IComponent
+    {
+        return _htmlRenderer.Dispatcher.InvokeAsync(async () =>
+        {
+            var output = await _htmlRenderer.RenderComponentAsync<T>(ParameterView.FromDictionary(parameters!));
+            return output.ToHtmlString();
+        });
+    }
+
     private async Task<NotificationEmail> HandleGrab(string json)
     {
         var grabbedPayload = JsonSerializer.Deserialize<SonarrGrabPayload>(json, _serializerOptions)!;
 
-        var html = await _htmlRenderer.Dispatcher.InvokeAsync(async () =>
+        var html = await RenderTemplate<GrabEpisodeTemplate>(new Dictionary<string, object>()
         {
-            var parameters = ParameterView.FromDictionary(new Dictionary<string, object>()
-            {
-                { "Payload", grabbedPayload }
-            }!);
-            var output = await _htmlRenderer.RenderComponentAsync<GrabEpisodeTemplate>(parameters);
-            return output.ToHtmlString();
+            { "Payload", grabbedPayload }
         });
         
         return new NotificationEmail()
         {
-            Subject = "Sonarr: Episode Grabbed",
+            Subject = CreateSubject("Episode Grabbed"),
             Body = html
+        };
+    }
+
+    private async Task<NotificationEmail> HandleDownload(string json)
+    {
+        var downloadPayload = JsonSerializer.Deserialize<SonarrImportPayload>(json, _serializerOptions)!;
+
+        var html = await RenderTemplate<DownloadEpisodeTemplate>(new Dictionary<string, object>()
+        {
+            { "Payload", downloadPayload }
+        });
+
+        return new NotificationEmail()
+        {
+            Subject = CreateSubject("Episode Downloaded"),
+            Body = html,
         };
     }
 
@@ -88,8 +108,13 @@ public class SonarrEmailBuilder
     {
         return new NotificationEmail()
         {
-            Subject = "Sonarr: Unknown Event Type",
+            Subject = CreateSubject("Unknown Event Type"),
             Body = json,
         };
+    }
+
+    private static string CreateSubject(string eventName)
+    {
+        return $"Sonarr: {eventName}";
     }
 }
