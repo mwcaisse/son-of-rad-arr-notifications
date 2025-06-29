@@ -1,11 +1,8 @@
 {
-  "email": {
-    "accessKey": "",
-    "secretKey": "",    
-    "region": "",
-    "fromAddress": ""
-  },
-  "notification": {
-    "toAddress": ""
-  }
+  "EMAIL_ACCESS_KEY": "",
+  "EMAIL_SECRET_KEY": "",
+  "EMAIL_REGION": "",
+  "EMAIL_FROM_ADDRESS": "",
+  "EMAIL_FROM_ADDRESS_NAME": "",
+  "EMAIL_TO_ADDRESS": ""
 }

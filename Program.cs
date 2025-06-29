@@ -23,17 +23,17 @@ builder.Configuration.AddJsonFile("application.settings.json", optional: true)
 
 var emailConfiguration = new EmailConfiguration()
 {
-    Region = builder.Configuration.GetValue<string>("email:region")!,
-    AccessKey = builder.Configuration.GetValue<string>("email:accessKey")!,
-    SecretKey = builder.Configuration.GetValue<string>("email:secretKey")!,
-    FromAddress = builder.Configuration.GetValue<string>("email:fromAddress")!,
-    FromAddressName = builder.Configuration.GetValue<string>("email:fromAddressName")
+    Region = builder.Configuration.GetValue<string>("EMAIL_REGION")!,
+    AccessKey = builder.Configuration.GetValue<string>("EMAIL_ACCESS_KEY")!,
+    SecretKey = builder.Configuration.GetValue<string>("EMAIL_SECRET_KEY")!,
+    FromAddress = builder.Configuration.GetValue<string>("EMAIL_FROM_ADDRESS")!,
+    FromAddressName = builder.Configuration.GetValue<string>("EMAIL_FROM_ADDRESS_NAME")
 };
 builder.Services.AddSingleton(emailConfiguration);
 
 var notificationConfiguration = new NotificationConfiguration()
 {
-    NotificationEmailAddress = builder.Configuration.GetValue<string>("notification:toAddress")!
+    NotificationEmailAddress = builder.Configuration.GetValue<string>("EMAIL_TO_ADDRESS")!
 };
 builder.Services.AddSingleton(notificationConfiguration);
 
