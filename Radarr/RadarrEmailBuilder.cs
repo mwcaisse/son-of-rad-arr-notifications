@@ -43,6 +43,8 @@ public class RadarrEmailBuilder
                 {
                     case RadarrEventType.Grab:
                         return await HandleGrab(rawPayloadJson);
+                    case RadarrEventType.Download:
+                        return await HandleDownload(rawPayloadJson);
                 }
             }
             
@@ -72,6 +74,22 @@ public class RadarrEmailBuilder
         return new NotificationEmail()
         {
             Subject = CreateSubject("Movie Grabbed"),
+            Body = html,
+        };
+    }
+
+    private async Task<NotificationEmail> HandleDownload(string payloadJson)
+    {
+        var downloadedPayload = JsonSerializer.Deserialize<RadarrImportPayload>(payloadJson, _serializerOptions)!;
+        
+        var html = await RenderTemplate<DownloadMovieTemplate>(new Dictionary<string, object>()
+        {
+            { "Payload", downloadedPayload } 
+        });
+
+        return new NotificationEmail()
+        {
+            Subject = CreateSubject("Movie Imported"),
             Body = html,
         };
     }

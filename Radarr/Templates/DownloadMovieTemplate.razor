@@ -1,0 +1,38 @@
+@using Humanizer
+@using SonOfRadArrNotifications.Common
+@using SonOfRadArrNotifications.Radarr.Payloads
+@using SonOfRadArrNotifications.Radarr.Payloads.Models
+
+<h2>Movie Imported!</h2>
+<table style="@CssUtils.TableStyle">
+    <tr>
+        <td>
+            @{
+                var posterImage = Payload.Movie.Images.FirstOrDefault(i => i.CoverType == RadarrMediaCoverTypes.Poster);
+                if (posterImage != null)
+                {
+                    <img src="@posterImage.RemoteUrl" alt="poster" style="@CssUtils.PosterImageStyle"/>
+                }
+            }
+        </td>
+        <td style="@CssUtils.SecondColumnStyle">
+            <h2>@Payload.Movie.Title (@Payload.Movie.Year)</h2>
+            <p>@Payload.Movie.Overview</p>
+            @{
+                var genres = string.Join(", ", Payload.Movie.Genres);
+                <p style="@CssUtils.MovieGenresStyle">@genres</p>
+            }
+            <p>@Payload.Movie.ReleaseDate</p>
+            <p>@Payload.MovieFile.Quality</p>
+            <p>@Payload.Release.ReleaseTitle</p>
+            <p>@Payload.Release.Indexer</p>
+            <p>@Payload.Release.Size.Bytes().Humanize()</p>
+        </td>
+    </tr>
+</table>
+
+@code {
+    
+    [Parameter]
+    public required RadarrImportPayload Payload { get; set; }
+}
