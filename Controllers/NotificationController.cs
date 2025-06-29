@@ -4,6 +4,7 @@ using SonOfRadArrNotifications.Configuration;
 using SonOfRadArrNotifications.Radarr;
 using SonOfRadArrNotifications.Services;
 using SonOfRadArrNotifications.Sonarr;
+using SonOfRadArrNotifications.Tasks;
 
 namespace SonOfRadArrNotifications.Controllers;
 
@@ -14,19 +15,19 @@ public class NotificationController : Controller
 
     private readonly SESService _sesService;
 
-    private readonly NotificationConfiguration _notificationConfiguration;
+    private readonly NotificationTaskQueue _taskQueue;
     
     private readonly SonarrEmailBuilder _sonarrEmailBuilder;
     
     private readonly RadarrEmailBuilder _radarrEmailBuilder;
 
-    public NotificationController(SESService sesService, NotificationConfiguration notificationConfiguration,
-        SonarrEmailBuilder sonarrEmailBuilder, RadarrEmailBuilder radarrEmailBuilder)
+    public NotificationController(SESService sesService,
+        SonarrEmailBuilder sonarrEmailBuilder, RadarrEmailBuilder radarrEmailBuilder, NotificationTaskQueue taskQueue)
     {
         _sesService = sesService;
-        _notificationConfiguration = notificationConfiguration;
         _sonarrEmailBuilder = sonarrEmailBuilder;
         _radarrEmailBuilder = radarrEmailBuilder;
+        _taskQueue = taskQueue;
     }
 
     /*
@@ -39,20 +40,21 @@ public class NotificationController : Controller
     [Route("sonarr")]
     public async Task<IActionResult> SonarrNotification()
     {
-        var bodyReader = new StreamReader(Request.Body);
-        var bodyJson = await bodyReader.ReadToEndAsync();
-        var email = await _sonarrEmailBuilder.BuildEmailBody(bodyJson);
-        
-        await _sesService.SendEmail(_notificationConfiguration.NotificationEmailAddress, email.Subject, email.Body);
-        return Ok();
+        var bodyJson = await ReadBodyAsString();
+        await _taskQueue.QueueTask(new NotificationTask()
+        {
+            Type = NotificationTaskType.Sonarr,
+            BodyJson = bodyJson
+        });
+
+        return Created();
     }
 
     [HttpPost]
     [Route("sonarr/render")]
     public async Task<IActionResult> RenderSonarrNotification()
     {
-        var bodyReader = new StreamReader(Request.Body);
-        var bodyJson = await bodyReader.ReadToEndAsync();
+        var bodyJson = await ReadBodyAsString();
         var email = await _sonarrEmailBuilder.BuildEmailBody(bodyJson);
 
         return new ContentResult()
@@ -67,20 +69,21 @@ public class NotificationController : Controller
     [Route("radarr")]
     public async Task<IActionResult>  RadarrNotification()
     {
-        var bodyReader = new StreamReader(Request.Body);
-        var bodyJson = await bodyReader.ReadToEndAsync();
-        var email = await _radarrEmailBuilder.BuildEmailBody(bodyJson);
-        
-        await _sesService.SendEmail(_notificationConfiguration.NotificationEmailAddress, email.Subject, email.Body);
-        return Ok();
+        var bodyJson = await ReadBodyAsString();
+        await _taskQueue.QueueTask(new NotificationTask()
+        {
+            Type = NotificationTaskType.Radarr,
+            BodyJson = bodyJson
+        });
+
+        return Created();
     }
     
     [HttpPost]
     [Route("radarr/render")]
     public async Task<IActionResult> RenderRadarrNotification()
     {
-        var bodyReader = new StreamReader(Request.Body);
-        var bodyJson = await bodyReader.ReadToEndAsync();
+        var bodyJson = await ReadBodyAsString();
         var email = await _radarrEmailBuilder.BuildEmailBody(bodyJson);
 
         return new ContentResult()
@@ -89,6 +92,12 @@ public class NotificationController : Controller
             ContentType = "text/html",
             StatusCode = 200
         };
+    }
+
+    private Task<string> ReadBodyAsString()
+    {
+        var bodyReader = new StreamReader(Request.Body);
+        return bodyReader.ReadToEndAsync();
     }
     
 }

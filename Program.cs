@@ -5,6 +5,7 @@ using SonOfRadArrNotifications.Configuration;
 using SonOfRadArrNotifications.Radarr;
 using SonOfRadArrNotifications.Services;
 using SonOfRadArrNotifications.Sonarr;
+using SonOfRadArrNotifications.Tasks;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -43,6 +44,9 @@ builder.Services.AddTransient<SESService>();
 builder.Services.AddTransient<SonarrEmailBuilder>();
 builder.Services.AddTransient<RadarrEmailBuilder>();
 builder.Services.AddTransient<HtmlRenderer>();
+
+builder.Services.AddSingleton<NotificationTaskQueue>();
+builder.Services.AddHostedService<NotificationTaskBackgroundService>();
 
 // Add services to the container.
 
