@@ -1,0 +1,88 @@
+@using SonOfRadArrNotifications.Common
+@using SonOfRadArrNotifications.Sonarr.Payloads
+@using SonOfRadArrNotifications.Sonarr.Payloads.Models
+
+<h2>New Show Added!</h2>
+<table style="@CssUtils.TableStyle">
+    <tr style="@CssUtils.TableRowStyle">
+        <td>
+            @{
+                var posterImage = Payload.Series.Images.FirstOrDefault(i => i.CoverType == MediaCoverTypes.Poster);
+                if (posterImage != null)
+                {
+                    <img src="@posterImage.RemoteUrl" alt="poster" style="@CssUtils.PosterImageStyle"/>
+                }
+            }
+        </td>
+        <td style="@CssUtils.SecondColumnStyle">
+            <h2>@Payload.Series.Title (@Payload.Series.Year)</h2>
+            @{
+                var genres = string.Join(", ", Payload.Series.Genres);
+                <p style="@CssUtils.MovieGenresStyle">@genres</p>
+            }
+            <p>
+                @foreach (var link in CreateSeriesLinks())
+                {
+                    <span style="@CssUtils.ShowLinkSpanStyle">
+                        <a href="@link.Url">@link.Name</a>
+                    </span>
+                }
+            </p>
+        </td>
+    </tr>
+</table>
+
+
+@code {
+    [Parameter]
+    public required SonarrSeriesAddPayload Payload { get; set; }
+
+    public class SeriesLink
+    {
+        public string Name { get; set; }
+        
+        public string Url { get; set; }
+    }
+
+    public List<SeriesLink> CreateSeriesLinks()
+    {
+        var links = new List<SeriesLink>();
+
+        if (!string.IsNullOrWhiteSpace(Payload.Series.ImdbId))
+        {
+            links.Add(new SeriesLink()
+            {
+                Name = "IMDB",
+                Url = $"https://www.imdb.com/title/{Payload.Series.ImdbId}/"
+            });
+        }
+
+        if (Payload.Series.TvdbId > 0)
+        {
+            links.Add(new SeriesLink()
+            {
+                Name = "The TVDB",
+                Url = $"https://www.thetvdb.com/?tab=series&id={Payload.Series.TvdbId}"
+            });
+        }
+
+        if (Payload.Series.TvMazeId > 0)
+        {
+            links.Add(new SeriesLink()
+            {
+                Name = "TV Maze",
+                Url = $"https://www.tvmaze.com/shows/{Payload.Series.TvMazeId}/_"
+            });
+        }
+
+        if (Payload.Series.TmdbId > 0)
+        {
+            links.Add(new SeriesLink()
+            {
+                Name = "TMDB",
+                Url = $"https://www.themoviedb.org/tv/{Payload.Series.TmdbId}"
+            });
+        }
+        return links;
+    }
+}

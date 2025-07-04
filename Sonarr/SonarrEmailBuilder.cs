@@ -47,6 +47,8 @@ public class SonarrEmailBuilder
                         return await HandleGrab(rawPayloadJson);
                     case SonarrEventType.Download:
                         return await HandleDownload(rawPayloadJson);
+                    case SonarrEventType.SeriesAdd:
+                        return await HandleSeriesAdd(rawPayloadJson);
                 }
             }
 
@@ -81,6 +83,22 @@ public class SonarrEmailBuilder
         return new NotificationEmail()
         {
             Subject = CreateSubject("Episode Grabbed"),
+            Body = html
+        };
+    }
+
+    private async Task<NotificationEmail> HandleSeriesAdd(string payloadJson)
+    {
+        var payload = JsonSerializer.Deserialize<SonarrSeriesAddPayload>(payloadJson, _serializerOptions)!;
+
+        var html = await RenderTemplate<SeriesAddTemplate>(new Dictionary<string, object>()
+        {
+            { "Payload", payload }
+        });
+        
+        return new NotificationEmail()
+        {
+            Subject = CreateSubject("New Show Added"),
             Body = html
         };
     }

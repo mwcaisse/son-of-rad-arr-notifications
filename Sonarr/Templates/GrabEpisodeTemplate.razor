@@ -6,7 +6,7 @@
 <h2>Episode Grabbed!</h2>
 <table
     style="@CssUtils.TableStyle">
-    <tr>
+    <tr style="@CssUtils.TableRowStyle">
         <td>
             @{
                 var posterImage = Payload.Series.Images.FirstOrDefault(i => i.CoverType == MediaCoverTypes.Poster);

@@ -1,0 +1,40 @@
+{
+  "series": {
+    "id": 197,
+    "title": "Apollo Has Fallen",
+    "titleSlug": "apollo-has-fallen",
+    "path": "/media/arch-data/media/Videos/TV Shows/Apollo Has Fallen",
+    "tvdbId": 462009,
+    "tvMazeId": 0,
+    "tmdbId": 287453,
+    "imdbId": "tt36350690",
+    "type": "standard",
+    "year": 0,
+    "genres": [
+      "Action",
+      "Thriller"
+    ],
+    "images": [
+      {
+        "coverType": "poster",
+        "url": "/MediaCover/197/poster.jpg?lastWrite=638872366828143539",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/462009/posters/67e6ba182f172.jpg"
+      },
+      {
+        "coverType": "fanart",
+        "url": "/MediaCover/197/fanart.jpg",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/462009/backgrounds/67e6ba3b47ad4.jpg"
+      }
+    ],
+    "tags": [
+      "4k"
+    ],
+    "originalLanguage": {
+      "id": 1,
+      "name": "English"
+    }
+  },
+  "eventType": "SeriesAdd",
+  "instanceName": "Sonarr",
+  "applicationUrl": ""
+}

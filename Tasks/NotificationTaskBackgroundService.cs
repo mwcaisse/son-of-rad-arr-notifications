@@ -1,4 +1,5 @@
 using Serilog;
+using SonOfRadArrNotifications.Common;
 using SonOfRadArrNotifications.Configuration;
 using SonOfRadArrNotifications.Radarr;
 using SonOfRadArrNotifications.Services;

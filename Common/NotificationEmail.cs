@@ -1,4 +1,4 @@
-namespace SonOfRadArrNotifications.Sonarr.Payloads;
+namespace SonOfRadArrNotifications.Common;
 
 public class NotificationEmail
 {

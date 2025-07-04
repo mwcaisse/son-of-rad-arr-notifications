@@ -5,7 +5,7 @@
 
 <h2>Movie Imported!</h2>
 <table style="@CssUtils.TableStyle">
-    <tr>
+    <tr style="@CssUtils.TableRowStyle">
         <td>
             @{
                 var posterImage = Payload.Movie.Images.FirstOrDefault(i => i.CoverType == RadarrMediaCoverTypes.Poster);
