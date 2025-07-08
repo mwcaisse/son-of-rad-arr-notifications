@@ -1,0 +1,65 @@
+{
+  "movie": {
+    "id": 321,
+    "title": "The Expendables",
+    "year": 2010,
+    "releaseDate": "2010-12-01",
+    "folderPath": "/media/arch-data/media/Videos/Movies/The Expendables (2010)",
+    "tmdbId": 27578,
+    "imdbId": "tt1320253",
+    "overview": "Barney Ross leads a band of highly skilled mercenaries including knife enthusiast Lee Christmas, a martial arts expert Yin Yang, heavy weapons specialist Hale Caesar, demolitionist Toll Road, and a loose-cannon sniper Gunner Jensen. When the group is commissioned by the mysterious Mr. Church to assassinate the dictator of a small South American island, Barney and Lee visit the remote locale to scout out their opposition and discover the true nature of the conflict engulfing the city.",
+    "genres": [
+      "Thriller",
+      "Adventure",
+      "Action"
+    ],
+    "images": [
+      {
+        "coverType": "poster",
+        "url": "/MediaCover/321/poster.jpg?lastWrite=638815788815309339",
+        "remoteUrl": "https://image.tmdb.org/t/p/original/j09ZkH6R4JWVylBcDai1laCmGw7.jpg"
+      },
+      {
+        "coverType": "fanart",
+        "url": "/MediaCover/321/fanart.jpg?lastWrite=638820111909986679",
+        "remoteUrl": "https://image.tmdb.org/t/p/original/sJpbDELfC8VjlRBOOkMJxxWpUg7.jpg"
+      }
+    ],
+    "tags": [],
+    "originalLanguage": {
+      "id": 1,
+      "name": "English"
+    }
+  },
+  "movieFile": {
+    "id": 310,
+    "relativePath": "The_Expendables.avi",
+    "path": "/media/arch-data/media/Videos/Movies/The Expendables (2010)/The_Expendables.avi",
+    "quality": "HDTV-720p",
+    "qualityVersion": 1,
+    "indexerFlags": "0",
+    "size": 2495770624,
+    "dateAdded": "2022-02-20T04:28:17.9343274Z",
+    "languages": [
+      {
+        "id": 1,
+        "name": "English"
+      }
+    ],
+    "mediaInfo": {
+      "audioChannels": 5.1,
+      "audioCodec": "AC3",
+      "audioLanguages": [],
+      "height": 544,
+      "width": 1280,
+      "subtitles": [],
+      "videoCodec": "XviD",
+      "videoDynamicRange": "",
+      "videoDynamicRangeType": ""
+    }
+  },
+  "deleteReason": "upgrade",
+  "eventType": "MovieFileDelete",
+  "instanceName": "Radarr",
+  "applicationUrl": ""
+} 

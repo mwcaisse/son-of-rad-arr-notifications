@@ -42,9 +42,11 @@ public class RadarrEmailBuilder
                 switch (payload.EventType)
                 {
                     case RadarrEventType.Grab:
-                        return await HandleGrab(rawPayloadJson);
+                        return await RenderTemplate<GrabMovieTemplate, RadarrGrabPayload>(rawPayloadJson, "Movie Grabbed");
                     case RadarrEventType.Download:
-                        return await HandleDownload(rawPayloadJson);
+                        return await RenderTemplate<DownloadMovieTemplate, RadarrImportPayload>(rawPayloadJson, "Movie Imported");
+                    case RadarrEventType.MovieFileDelete:
+                        return await RenderTemplate<MovieFileDeleteTemplate, RadarrMovieFileDeletePayload>(rawPayloadJson, "Movie File Deleted");
                 }
             }
             
@@ -61,42 +63,21 @@ public class RadarrEmailBuilder
         }
         
     }
-
-    private async Task<NotificationEmail> HandleGrab(string payloadJson)
-    {
-        var grabbedPayload = JsonSerializer.Deserialize<RadarrGrabPayload>(payloadJson, _serializerOptions)!;
-        
-        var html = await RenderTemplate<GrabMovieTemplate>(new Dictionary<string, object>()
-        {
-            { "Payload", grabbedPayload } 
-        });
-
-        return new NotificationEmail()
-        {
-            Subject = CreateSubject("Movie Grabbed"),
-            Body = html,
-        };
-    }
-
-    private async Task<NotificationEmail> HandleDownload(string payloadJson)
-    {
-        var downloadedPayload = JsonSerializer.Deserialize<RadarrImportPayload>(payloadJson, _serializerOptions)!;
-        
-        var html = await RenderTemplate<DownloadMovieTemplate>(new Dictionary<string, object>()
-        {
-            { "Payload", downloadedPayload } 
-        });
-
-        return new NotificationEmail()
-        {
-            Subject = CreateSubject("Movie Imported"),
-            Body = html,
-        };
-    }
     
-    private Task<string> RenderTemplate<T>(Dictionary<string, object> parameters) where T : IComponent
+    private async Task<NotificationEmail> RenderTemplate<TT, TP>(string payloadJson, string subject, string payloadParamName = "Payload") where TT : IComponent where TP : RadarrPayloadBase
     {
-        return EmailBuilderUtils.RenderTemplate<T>(_htmlRenderer, parameters);
+        var payload = JsonSerializer.Deserialize<TP>(payloadJson, _serializerOptions)!;
+        var parameters = new Dictionary<string, object>()
+        {
+            { payloadParamName, payload }
+        };
+        
+        var html = await EmailBuilderUtils.RenderTemplate<TT>(_htmlRenderer, parameters);
+        return new NotificationEmail()
+        {
+            Subject = CreateSubject(subject),
+            Body = html
+        };
     }
     
     private NotificationEmail HandleUnknownPayload(string json)

@@ -20,7 +20,7 @@ public class RadarrMovieFile
     
     public long Size { get; set; }
     
-    public DateTime DateAdded { get; set; }
+    public DateTime? DateAdded { get; set; }
     
     public List<Language> Languages { get; set; }
     
