@@ -24,7 +24,20 @@
                 <p style="@CssUtils.MovieGenresStyle">@genres</p>
             }
             <p>@Payload.Movie.ReleaseDate</p>
-            <p>@Payload.MovieFile.Size.Bytes().Humanize()</p>
+            <p>
+                <span>@Payload.MovieFile.Quality</span>
+                @{
+                    var mediaInfo = Payload.MovieFile.MediaInfo;
+                    if (mediaInfo != null)
+                    {
+                        <span style="padding-left: 0.5rem;">(@mediaInfo.Width x @mediaInfo.Height @mediaInfo.VideoCodec)</span>
+                    }
+                }
+            </p>
+            <p>
+                <span>@Payload.MovieFile.Size.Bytes().Humanize()</span>
+                <span style="padding-left: 0.5rem;">@Payload.MovieFile.RelativePath</span>
+            </p>
             @{
                 if (Payload.MovieFile.DateAdded != null)
                 {
@@ -40,4 +53,5 @@
     
     [Parameter]
     public required RadarrMovieFileDeletePayload Payload { get; set; }
+    
 }

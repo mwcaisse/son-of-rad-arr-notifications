@@ -24,7 +24,7 @@ public class RadarrMovieFile
     
     public List<Language> Languages { get; set; }
     
-    public RadarrMovieFileMediaInfo MediaInfo { get; set; }
+    public RadarrMovieFileMediaInfo? MediaInfo { get; set; }
     
     public string SourcePath { get; set; }
     
