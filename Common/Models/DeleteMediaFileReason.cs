@@ -1,4 +1,4 @@
-namespace SonOfRadArrNotifications.Radarr.Payloads.Models;
+namespace SonOfRadArrNotifications.Common.Models;
 
 public enum DeleteMediaFileReason
 {

@@ -18,11 +18,11 @@ public class SonarrEpisodeFile
     
     public long Size { get; set; }
     
-    public DateTime DateAdded { get; set; }
+    public DateTime? DateAdded { get; set; }
     
     public List<Language> Languages { get; set; }
     
-    // TODO: MediaInfo
+    public SonarrEpisodeFileMediaInfo? MediaInfo { get; set; }
     
     public string SourcePath { get; set; }
     

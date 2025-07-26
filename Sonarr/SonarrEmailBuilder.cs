@@ -49,6 +49,8 @@ public class SonarrEmailBuilder
                         return await HandleDownload(rawPayloadJson);
                     case SonarrEventType.SeriesAdd:
                         return await HandleSeriesAdd(rawPayloadJson);
+                    case SonarrEventType.EpisodeFileDelete:
+                        return await HandleEpisodeDeleted(rawPayloadJson);
                 }
             }
 
@@ -117,6 +119,22 @@ public class SonarrEmailBuilder
             Subject = CreateSubject("Episode Imported"),
             Body = html,
         };
+    }
+
+    private async Task<NotificationEmail> HandleEpisodeDeleted(string payloadJson)
+    {
+        var episodeFileDeletedPayload = JsonSerializer.Deserialize<SonarrEpisodeDeletePayload>(payloadJson, _serializerOptions)!;
+        
+        var html = await RenderTemplate<EpisodeDeleteTemplate>(new Dictionary<string, object>()
+        {
+            { "Payload", episodeFileDeletedPayload }
+        });
+
+        return new NotificationEmail()
+        {
+            Subject = CreateSubject("Episode File Deleted"),
+            Body = html,
+        }; 
     }
 
     private NotificationEmail HandleUnknownPayload(string json)

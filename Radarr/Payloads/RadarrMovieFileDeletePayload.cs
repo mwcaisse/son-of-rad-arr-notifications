@@ -1,3 +1,4 @@
+using SonOfRadArrNotifications.Common.Models;
 using SonOfRadArrNotifications.Radarr.Payloads.Models;
 
 namespace SonOfRadArrNotifications.Radarr.Payloads;
