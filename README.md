@@ -26,3 +26,18 @@ services:
 ```
 
 It currently only supports Amazon SES for sending emails, you will need to configure SES (https://aws.amazon.com/ses/)
+
+## Supported Notifications
+Currently not all notification types have a template associated with them. Additional notification templates are added
+    as sample payloads are available for them. Non supported events still create an email, just with raw JSON payload.
+
+### Radarr
+* Movie Grabbed
+* Movie Downloaded
+* Move File Deleted
+
+### Sonarr
+* Episode Grabbed
+* Episode Downloaded
+* Episode File Deleted
+* Series Added
