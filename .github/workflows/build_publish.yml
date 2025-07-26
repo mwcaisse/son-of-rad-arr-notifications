@@ -11,8 +11,8 @@ concurrency:
     
 jobs:
   
-  build_publish:
-    name: "Build and Publish image"
+  build_publish_gitlab:
+    name: "Build and Publish image (Gitlab)"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout master
@@ -27,3 +27,20 @@ jobs:
           tags: |
             registry.gitlab.com/mwcaisse/application-images/son-of-rad-arr-notifications:latest
             registry.gitlab.com/mwcaisse/application-images/son-of-rad-arr-notifications:${{ github.sha }}   
+            
+  build_publish_github:
+    name: "Build and Publish image (Github)"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+
+      - name: Build and Publish
+        uses: mwcaisse/gha-common/actions/build_and_push_image@master
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ GITHUB_TOKEN }}
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ github.sha }}   
