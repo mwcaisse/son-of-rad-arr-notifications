@@ -49,3 +49,17 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ github.sha }}               
+  
+  scan_image:
+    name: "Scan image for CVEs"
+    needs:
+      - build_publish_github
+    runs-on: ubuntu-latest
+    steps:
+        - name: Trivy Vulnerability Scanner      
+          uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # 0.33.1
+          with:
+            image-ref: ghcr.io/${{ github.repository }}:${{ github.sha }}
+            format: "table"
+            ignore-unfixed: true
+            severity: "CRITICAL,HIGH"
