@@ -12,6 +12,8 @@ RUN dotnet publish -c release -o /build/out
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 
+RUN apt-get update && apt-get upgrade -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 COPY --from=build /build/out ./
