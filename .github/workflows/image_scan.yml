@@ -1,12 +1,9 @@
 name: Image Scan
 on:
   workflow_run:
-    workflows: 
-      - "Build and Publish docker image"
+    workflows: ["Build and Publish docker image"]
     types:
       - completed
-    branches:
-      - master
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
