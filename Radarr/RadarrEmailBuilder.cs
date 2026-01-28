@@ -47,6 +47,9 @@ public class RadarrEmailBuilder
                         return await RenderTemplate<DownloadMovieTemplate, RadarrImportPayload>(rawPayloadJson, "Movie Imported");
                     case RadarrEventType.MovieFileDelete:
                         return await RenderTemplate<MovieFileDeleteTemplate, RadarrMovieFileDeletePayload>(rawPayloadJson, "Movie File Deleted");
+                    case RadarrEventType.Health:
+                        return await RenderTemplate<HealthTemplate, RadarrHealthPayload>(
+                            rawPayloadJson, "Health");
                 }
             }
             

@@ -1,0 +1,21 @@
+@using SonOfRadArrNotifications.Radarr.Payloads
+
+<h2>Health Status</h2>
+<p>
+    Level: @Payload.Level
+</p>
+<p>
+    Type: @Payload.Type
+</p>
+<p>
+    @Payload.Message
+</p>
+<p>
+    <a href="@Payload.WikiUrl">Wiki URL</a>
+</p>
+
+@code {
+    
+    [Parameter]
+    public required RadarrHealthPayload Payload { get; set; }
+}

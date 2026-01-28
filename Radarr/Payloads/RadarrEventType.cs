@@ -12,5 +12,5 @@ public enum RadarrEventType
     ApplicationUpdate,
     MovieAdded,
     HealthRestored,
-    ManualInteractionRequired
+    ManualInteractionRequired,
 }
